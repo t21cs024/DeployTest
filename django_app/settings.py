@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-466+uwy*6f9n9^^7)mng4)@z0*cjp^kv(+9v3&ymn=#l^m1vv1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
 
 
 # Application definition
@@ -39,6 +39,25 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'hello.apps.HelloConfig',
 ]
+# mail(gmailの使用を想定）
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587 # gmail
+
+# user.txtから読み込んだ設定を使って変数にセット(user.txtはbd.sqliteと同じフォルダに置き，コミットしないでください)
+'''
+---user.txt---
+your_gmail@gmail（送信元メールアドレスになります）
+your_passward（16文字のアプリパスワード)
+------
+アプリパスワードについて参考文献 https://codelab.website/django-send-gmail/
+'''
+with open(BASE_DIR /'user.txt','r') as f:
+    datalist = f.readlines()
+# 送信元メールアドレス
+EMAIL_HOST_USER = datalist[0]
+EMAIL_HOST_PASSWORD = datalist[1]
+EMAIL_USE_TLS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -104,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja'
 
 TIME_ZONE = 'UTC'
 
